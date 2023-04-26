@@ -24,16 +24,23 @@ def softmax(x):
 
 def get_data() :
     # load the data
-    train_df = pd.read_csv('/Users/akk0018/Documents/ML/MLProject/mnist_train.csv')
-    test_df=pd.read_csv('/Users/akk0018/Documents/ML/MLProject/mnist_test.csv')
-    first_100 = train_df.head(500000)
-    X_train, X_test, y_train, y_test = train_test_split(first_100.drop('label', axis=1).values, first_100['label'].values, test_size=0.5, random_state=40)
+    train_df = pd.read_csv('/Users/akk0018/Documents/ML/SVM_Assignment2/data/mnist_train.csv')
+    test_df=pd.read_csv('/Users/akk0018/Documents/ML/SVM_Assignment2/data/mnist_test.csv')
+    crossdomain_test=pd.read_csv('/Users/akk0018/Documents/ML/SVM_Assignment2/data/train_mnist-m.csv')
+    #first_100 = train_df.head(500000)
+    #X_train, X_test, y_train, y_test = train_test_split(first_100.drop('label', axis=1).values, first_100['label'].values, test_size=0.5, random_state=40)
 
     #X_train = train_df.drop('label', axis=1).values
     #y_train = train_df['label'].values
-
+    X_train = train_df.drop('label', axis=1).values
+    y_train = train_df['label'].values
+    
+    X_test = crossdomain_test.drop('label', axis=1).values
+    y_test = crossdomain_test['label'].values
+    
     W_test = test_df.drop('label', axis=1).values
     w_test = test_df['label'].values
+    
 
     return X_train, X_test, y_train, y_test ,W_test,w_test
 
@@ -151,7 +158,7 @@ def train_network(samples, labels, jsjtest, jlebel, hidden_layer_size, adaptatio
             d += learning_rate * delta_d
             print (np.max(np.abs(delta_w)) )
         # Stopping criterion
-        if np.max(np.abs(delta_w)) < 1e-6:
+        if np.max(np.abs(delta_w)) < 1e-4:
             
             break
 
@@ -175,7 +182,7 @@ X_train, J_train, y_train, k_train ,W_test,w_test=get_data()
 #Xsamples = (X_train, y_train)
 adaptation_parameter = 0.01
 learning_rate = 0.001
-hidden_layer_size = 200
+hidden_layer_size = 250
 Xsamples = (X_train, y_train)
 Jsamples = (X_train, y_train)
 W, V, b, c = train_network(X_train, y_train, J_train, k_train, hidden_layer_size, adaptation_parameter, learning_rate)
