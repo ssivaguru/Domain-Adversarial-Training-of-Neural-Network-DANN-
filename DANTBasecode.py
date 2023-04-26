@@ -103,14 +103,21 @@ def train_network(samples, labels, jsjtest, jlebel, hidden_layer_size, adaptatio
 
     # Initialize weights and biases
     np.random.seed(0)
-    W = np.random.randn(n_hidden, n_features)
+    W = np.random.randn(n_hidden, n_features) 
     V = np.random.randn(n_labels, n_hidden)
     b = np.zeros((n_hidden, 1))
     c = np.zeros((n_labels, 1))
     u = np.zeros((n_hidden, 1))
-    d = 0
-
-    # Convert labels to one-hot encoding
+    #d = np.zeros((n_labels, 1))
+    d=0
+    ''' # Initialize the weights and biases
+    W = np.random.randn(784, n_hidden) * 0.01
+    b = np.zeros((1, n_hidden))
+    V = np.random.randn(n_hidden, 10) * 0.01
+    c = np.zeros((1, 10))
+    U = np.random.randn(n_hidden, 10) * 0.01
+    d = np.zeros((1, 10))
+    # Convert labels to one-hot encoding'''
     Y = one_hot_encode(labels)
 
     while True:
@@ -130,6 +137,7 @@ def train_network(samples, labels, jsjtest, jlebel, hidden_layer_size, adaptatio
             gd = sigmoid(d + np.dot(u.T, gf))
             delta_d = adaptation_parameter * (1 - gd)
             delta_u = adaptation_parameter * (1 - gd) * gf
+            
             tmp = adaptation_parameter * (1 - gd) * u * gf * (1 - gf)
             delta_b += tmp
             delta_w += np.dot(tmp, xi.T)
@@ -158,7 +166,7 @@ def train_network(samples, labels, jsjtest, jlebel, hidden_layer_size, adaptatio
             d += learning_rate * delta_d
             print (np.max(np.abs(delta_w)) )
         # Stopping criterion
-        if np.max(np.abs(delta_w)) < 1e-4:
+        if np.max(np.abs(delta_w)) < 6e-6:
             
             break
 
@@ -223,4 +231,10 @@ precision = precision_score(w_test, y_pred, average='weighted')
 recall = recall_score(w_test, y_pred, average='weighted')
 f1 = f1_score(w_test, y_pred, average='weighted')
 
-print(f' accuracy={accuracy}, precision={precision}, recall={recall}, f1_score={f1}')
+print(f' Test accuracy={accuracy}, precision={precision}, recall={recall}, f1_score={f1}')
+
+accuracy = accuracy_score(y_train, y_pred_train)
+precision = precision_score(y_train, y_pred_train, average='weighted')
+recall = recall_score(y_train, y_pred_train, average='weighted')
+f1 = f1_score(y_train, y_pred_train, average='weighted')
+print(f' Training accuracy={accuracy}, precision={precision}, recall={recall}, f1_score={f1}')
