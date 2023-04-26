@@ -238,3 +238,4 @@ precision = precision_score(y_train, y_pred_train, average='weighted')
 recall = recall_score(y_train, y_pred_train, average='weighted')
 f1 = f1_score(y_train, y_pred_train, average='weighted')
 print(f' Training accuracy={accuracy}, precision={precision}, recall={recall}, f1_score={f1}')
+
